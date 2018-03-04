@@ -7,7 +7,7 @@ public class Operations {
     public static Number sum(Number thisNumber, Number otherNumber){
         if (thisNumber.scaleName.equals(otherNumber.scaleName)){
             return new Number(thisNumber.amount + otherNumber.amount,
-                    thisNumber.scaleName);
+                    thisNumber.subamount + otherNumber.subamount, thisNumber.scaleName);
         } else{
             System.out.println("Operation's result is null, because you gave the wrong scaleName");
             return null;
@@ -16,20 +16,26 @@ public class Operations {
     static Number subtraction(Number thisNumber, Number otherNumber){
         if (thisNumber.scaleName.equals(otherNumber.scaleName)){
             return new Number(thisNumber.amount - otherNumber.amount,
-                    thisNumber.scaleName);
+                    thisNumber.subamount - otherNumber.subamount, thisNumber.scaleName);
         } else{
             System.out.println("Operation's result is null, because you gave the wrong scaleName");
             return null;
         }
     }
-    public static Number multiplication(Number thisNumber, double multiplier){
-        return Number.createNumber(thisNumber.amount * multiplier, thisNumber.scaleName);
+    public static void multiplication(Number thisNumber, double multiplier){
+        thisNumber.amount *= multiplier;
+        thisNumber.subamount *= multiplier;
+        Number.recalculate(thisNumber);
     }
-    public static Boolean compareTo(Number thisNumber, Number otherNumber)
-    {
-        return (!(!thisNumber.scaleName.equals(otherNumber.scaleName) || (thisNumber.amount != otherNumber.amount)));
+    public static Boolean compareTo(Number thisNumber, Number otherNumber) {
+        Number.recalculate(thisNumber);
+        Number.recalculate(otherNumber);
+        return (!(!thisNumber.scaleName.equals(otherNumber.scaleName) || (thisNumber.amount != otherNumber.amount)
+                || (thisNumber.subamount != otherNumber.subamount)));
     }
-    public static Number divisionInto(Number thisNumber, double divider){
-        return Number.createNumber(thisNumber.amount / divider, thisNumber.scaleName);
+    public static void divisionInto(Number thisNumber, double divider){
+        thisNumber.amount /= divider;
+        thisNumber.subamount /= divider;
+        Number.recalculate(thisNumber);
     }
 }
