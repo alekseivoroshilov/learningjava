@@ -7,15 +7,15 @@ class Number {
     double amount;
     public double subamount;
     String scaleName;
-    public static Map<String,String> mapOfScales = new HashMap<String,String>();
+    private static Map<String,String> mapOfScales = new HashMap<String,String>();
     public static void init(){
         mapOfScales.put("m", "cm");
         mapOfScales.put("h", "min");
     }
-    Number() {
+    private Number() {
         amount = 0.0;
-        subamount = 0;
-        scaleName = "meters";
+        subamount = 0.0;
+        scaleName = "m";
     }
     Number(double amount , double subamount, String scaleName) {
         this.amount = amount;
@@ -24,7 +24,7 @@ class Number {
     }
 
     static void recalculate(Number number){
-        /*switch(number.scaleName){
+        switch(number.scaleName){
             case "m":
                 while (number.subamount >= 100){
                     ++number.amount;
@@ -43,8 +43,7 @@ class Number {
                     number.subamount = (number.amount % 1.0) * 60;
                     number.amount -= number.amount % 1.0;
                 }
-        }*/
-        System.out.println(number.scaleName);
+        }
         if (number.scaleName.equals("m")){
             double sum = number.amount + (number.subamount / 100.0);
             if (sum % 1.0 != 0.0){

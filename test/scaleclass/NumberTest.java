@@ -10,12 +10,16 @@ class NumberTest {
         assertEquals("2.15 m", Number.toString(actual));
         actual = Operations.sum(Number.fromString("15 cm"), Number.fromString("15 cm"));
         assertEquals("30.0 cm", Number.toString(actual));
+        actual = Operations.sum(Number.fromString("0.0 cm"), Number.fromString("0 m"));
+        assertEquals("0.0 cm", Number.toString(actual));
     }
     @org.junit.jupiter.api.Test
     void subtraction() {
         Number.init();
         Number actual = Operations.subtraction(Number.fromString("2 m"), Number.fromString("4 m"));
         assertEquals("-2.0 m", Number.toString(actual));
+        actual = Operations.subtraction(Number.fromString("2 h"), Number.fromString("1.5 h"));
+        assertEquals("30.0 min", Number.toString(actual));
     }
 
     @org.junit.jupiter.api.Test
@@ -24,6 +28,9 @@ class NumberTest {
         Number actual = Number.fromString("2 m");
         Operations.multiplication(actual, 4);
         assertEquals("8.0 m", Number.toString(actual));
+        actual = Number.fromString("15 cm");
+        Operations.multiplication(actual, 7);
+        assertEquals("1.05 m", Number.toString(actual));
     }
 
     @org.junit.jupiter.api.Test

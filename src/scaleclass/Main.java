@@ -1,4 +1,3 @@
-package main.scaleclass;
 
 public class Main {
 
