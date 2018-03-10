@@ -4,21 +4,21 @@ class NumberTest {
     @org.junit.jupiter.api.Test
     void sum() {
         Number.init();
-        Number actual = Operations.sum(Number.fromString("2 m"), Number.fromString("4 m"));
+        Number actual = Number.sum(Number.fromString("2 m"), Number.fromString("4 m"));
         assertEquals("6.0 m", Number.toString(actual));
-        actual = Operations.sum(Number.fromString("2 m"), Number.fromString("15 cm"));
+        actual = Number.sum(Number.fromString("2 m"), Number.fromString("15 cm"));
         assertEquals("2.15 m", Number.toString(actual));
-        actual = Operations.sum(Number.fromString("15 cm"), Number.fromString("15 cm"));
+        actual = Number.sum(Number.fromString("15 cm"), Number.fromString("15 cm"));
         assertEquals("30.0 cm", Number.toString(actual));
-        actual = Operations.sum(Number.fromString("0.0 cm"), Number.fromString("0 m"));
+        actual = Number.sum(Number.fromString("0.0 cm"), Number.fromString("0 m"));
         assertEquals("0.0 cm", Number.toString(actual));
     }
     @org.junit.jupiter.api.Test
     void subtraction() {
         Number.init();
-        Number actual = Operations.subtraction(Number.fromString("2 m"), Number.fromString("4 m"));
+        Number actual = Number.subtraction(Number.fromString("2 m"), Number.fromString("4 m"));
         assertEquals("-2.0 m", Number.toString(actual));
-        actual = Operations.subtraction(Number.fromString("2 h"), Number.fromString("1.5 h"));
+        actual = Number.subtraction(Number.fromString("2 h"), Number.fromString("1.5 h"));
         assertEquals("30.0 min", Number.toString(actual));
     }
 
@@ -26,10 +26,10 @@ class NumberTest {
     void multiplication() {
         Number.init();
         Number actual = Number.fromString("2 m");
-        Operations.multiplication(actual, 4);
+        Number.multiplication(actual, 4);
         assertEquals("8.0 m", Number.toString(actual));
         actual = Number.fromString("15 cm");
-        Operations.multiplication(actual, 7);
+        Number.multiplication(actual, 7);
         assertEquals("1.05 m", Number.toString(actual));
     }
 
@@ -37,14 +37,14 @@ class NumberTest {
     void compareTo() {
         Number expected = Number.fromString("8 m");
         Number actual = new Number(8.0,0.0, "m");
-        assertTrue(Operations.compareTo(expected, actual));
+        assertTrue(Number.compareTo(expected, actual));
     }
 
     @org.junit.jupiter.api.Test
     void divisionInto() {
         Number.init();
         Number actual = Number.fromString("8 m");
-        Operations.divisionInto(actual, 4);
+        Number.divisionInto(actual, 4);
         assertEquals("2.0 m", Number.toString(actual));
     }
 
