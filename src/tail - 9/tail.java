@@ -1,3 +1,4 @@
+import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Scanner;
@@ -5,22 +6,17 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.io.*;
 
-public class tail {
-    private ArrayList<String> form = new ArrayList<String>();
+public class Tail {
+    private String[] args;
 
-    public void run(String[] args) {
-        fromString();
-        get_tail();
-    }
-
-    private void fromString() {
+    /*private void fromString() {
         System.out.println("Hello! This program can return last lines and symbols.\n Please, write a command:");
         Scanner sc = new Scanner(System.in);
         String string = sc.nextLine();
         Collections.addAll(form, string.split(" "));
-    }
+    }*/
 
-    private void get_tail(){
+    void get_tail(String[] args){
         ArrayList<String> files = new ArrayList<String>(); //то, куда кидаю перечень имен файлов с текстом
         Boolean c = false;
         Boolean n = false;
@@ -32,22 +28,22 @@ public class tail {
         Matcher m;
         String element;
 
-        for (int i = 0; i < form.size(); i++) {
-            element = form.get(i);
+        for (int i = 0; i < args.length; i++) {
+            element = args[i];
             switch (element) {
                 case "-c": {
                     c = true;
-                    cNum = Integer.parseInt(form.get(i + 1));
+                    cNum = Integer.parseInt(args[i + 1]);
                     ++i;
                 }
                 case "-n": {
                     n = true;
-                    nNum = Integer.parseInt(form.get(i + 1));
+                    nNum = Integer.parseInt(args[i + 1]);
                     ++i;
                 }
                 case "-o": {
                     outputFileExists = true;
-                    oName = form.get(i + 1);
+                    oName = args[i + 1];
                     ++i;
                 }
             }
@@ -185,6 +181,8 @@ public class tail {
             }
 
             try (PrintWriter out = new PrintWriter(file.getAbsoluteFile())) {
+
+                BufferedWriter bw = new BufferedWriter()
                 out.print(text);
             }
         } catch (IOException e) { //от меня просто железно потребовалось ловить IOException
