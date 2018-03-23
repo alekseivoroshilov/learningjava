@@ -6,7 +6,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.io.*;
 
-public class Tail {
+class Tail {
     private String[] args;
 
     /*private void fromString() {
@@ -17,6 +17,7 @@ public class Tail {
     }*/
 
     void get_tail(String[] args){
+        System.out.println("I was there4");
         ArrayList<String> files = new ArrayList<String>(); //то, куда кидаю перечень имен файлов с текстом
         Boolean c = false;
         Boolean n = false;
@@ -26,44 +27,44 @@ public class Tail {
         String oName = "output.txt";
         Pattern pattern = Pattern.compile("(([a-zA-z0-9|_|-]+).(txt|doc))");
         Matcher m;
-        String element;
 
         for (int i = 0; i < args.length; i++) {
-            element = args[i];
-            switch (element) {
+            switch (args[i]) {
                 case "-c": {
                     c = true;
-                    cNum = Integer.parseInt(args[i + 1]);
-                    ++i;
+                    i++;
+                    cNum = Integer.parseInt(args[i]);
+                    break;
                 }
                 case "-n": {
                     n = true;
-                    nNum = Integer.parseInt(args[i + 1]);
-                    ++i;
+                    i++;
+                    nNum = Integer.parseInt(args[i]);
+                    break;
                 }
                 case "-o": {
                     outputFileExists = true;
-                    oName = args[i + 1];
-                    ++i;
+                    i++;
+                    oName = args[i];
+                    break;
                 }
             }
-            m = pattern.matcher(element);
-            if (m.matches()) files.add(element);
+            if (!args[i].equals(oName)) {
+                m = pattern.matcher(args[i]);
+                if (m.matches()) files.add(args[i]);
+            }
         }
-
-        Boolean returnTenLastLines = false;
         if (c && n) throw new IllegalArgumentException();
-        else if (!c && !n) returnTenLastLines = true;
 
         ArrayList<String> lineList = new ArrayList<>();
-
         for (int i = 0; i < files.size(); i++) {
 
             if (n) {
                 lineList = readLines(files.get(i), nNum);
             } else if (c) {
                 lineList = readSymbols(files.get(i), cNum);
-            } else if (returnTenLastLines) {
+                Collections.reverse(lineList); //чтобы строки с символами были не в обратном порядке
+            } else {
                 lineList = readLines(files.get(i), 10);
             }
 
@@ -85,33 +86,33 @@ public class Tail {
         }
     }
 
-    ArrayList<String> readLines(String fileName, Integer nNum) {
+    private ArrayList<String> readLines(String fileName, Integer nNum) {
         ArrayList<String> lineList = new ArrayList<>();
         ArrayList<String> returnList = new ArrayList<>();
-        try (BufferedReader br = new BufferedReader(new FileReader(fileName))) { //наткнулся на try-with-resources
+        //наткнулся на try-with-resources
+        //надо выбрать кодировку, иначе кириллица будет кракозябная
+        try(BufferedReader in = new BufferedReader(new InputStreamReader(new FileInputStream(fileName),"UTF-8"))){
             //чтение построчно
             String s;
-            while ((s = br.readLine()) != null) {
+            while ((s = in.readLine()) != null) {
                 lineList.add(s);
             }
         } catch (IOException ex) {
             System.out.println(ex.getMessage()); //должно выводить сообщение
         }
-        for (int i = lineList.size() - 1; i >= nNum; i--) {
+        for (int i = lineList.size() - nNum; i < lineList.size(); i++) {
             returnList.add(lineList.get(i));
         }
         return returnList; // вернётся лист с последними nNum строками для флага -n
     }
 
-    ArrayList<String> readSymbols(String fileName, Integer cNum) {
+    private ArrayList<String> readSymbols(String fileName, Integer cNum) {
         ArrayList<String> lineList = new ArrayList<>();
-        try (BufferedReader br = new BufferedReader(new FileReader(fileName))) {
+        try(BufferedReader in = new BufferedReader(new InputStreamReader(new FileInputStream(fileName),"UTF-8"))){
             // чтение посимвольно
             String c;
-            while ((c = br.readLine()) != null) {
+            while ((c = in.readLine()) != null) {
                 lineList.add(c);
-                // возвращая n-ое кол-во последних символов, понадобятся разделители
-                //lineList.add(System.lineSeparator());
             }
         } catch (IOException ex) {
             System.out.println(ex.getMessage());
@@ -138,13 +139,13 @@ public class Tail {
         return linesWithLastSymbols;
     }
 
-    public static String read(String fileName) throws FileNotFoundException {
+    private static String read(String fileName) throws FileNotFoundException {
         StringBuilder sb = new StringBuilder();
         File file = new File(fileName);
         exists(fileName);
 
         try {
-            try (BufferedReader in = new BufferedReader(new FileReader(file.getAbsoluteFile()))) {
+            try(BufferedReader in = new BufferedReader(new InputStreamReader(new FileInputStream(fileName),"UTF-8"))){
                 String s;
                 while ((s = in.readLine()) != null) {
                     sb.append(s);
@@ -154,6 +155,7 @@ public class Tail {
         } catch (IOException e) {
             throw new RuntimeException(e); //чтобы надолго не зависал // а так требует IOException всегда
         }
+        System.out.println(sb);
         return sb.toString();
     }
 
@@ -179,11 +181,8 @@ public class Tail {
             if (!file.exists()) {
                 file.createNewFile();
             }
-
-            try (PrintWriter out = new PrintWriter(file.getAbsoluteFile())) {
-
-                BufferedWriter bw = new BufferedWriter()
-                out.print(text);
+            try (BufferedWriter bw = new BufferedWriter(new FileWriter(fileName))) {
+                bw.write(text);
             }
         } catch (IOException e) { //от меня просто железно потребовалось ловить IOException
             System.out.println("Something has got wrong while writing");

@@ -1,6 +1,11 @@
-Кэмпбелл известен как создатель теории мономифа — единой для любой мифологии последовательности странствий и испытаний героя. Исследователь выделил три стадии становления героя: исход, инициация и возвращение.
+п»їStandard charsets
 
-На первой стадии герой готовится к странствиям. В пути ему оказывается сверхъестественное покровительство, герой преодолевает первый порог и отказывается от своей прошлой жизни. Вторая ступень — инициация героя. Он преодолевает испытания, встречается с женщиной и переживает искушение любовью. Ключевым моментом становится столкновение с могущественным существом, обладающим властью над жизнью и смертью. Примечательно, что во многих культурах и мифах эта фигура ассоциируется с образом отца. 
-И последний шаг — кульминация конфликта, апофеоз, часто заканчивающийся гибелью персонажа.
-Сюжет «Звёздных войн» во многом соответствует первым двум стадиям. 
-Исход: Люк получает призыв о помощи от принцессы Леи. Сверхъестественное покровительство: Кеноби спасает Скайуокера от неприятностей. Они приезжают в Мос-Эйсли, где Люк продаёт последнее, что связывало его с Татуином. На второй ступени Люк встречает женщину — принцессу Лею, а потом сталкивается с Дартом Вейдером — вот и «мифологический отец».
+Every implementation of the Java platform is required to support the following standard charsets. Consult the release documentation for your implementation to see if any other charsets are supported.
+
+Charset Description
+US-ASCII Seven-bit ASCII, a.k.a. ISO646-US, a.k.a. the Basic Latin block of the Unicode character set
+ISO-8859-1 ISO Latin Alphabet No. 1, a.k.a. ISO-LATIN-1
+UTF-8 Eight-bit UCS Transformation Format
+UTF-16BE Sixteen-bit UCS Transformation Format, big-endian byte order
+UTF-16LE Sixteen-bit UCS Transformation Format, little-endian byte order
+UTF-16 Sixteen-bit UCS Transformation Format, byte order identified by an optional byte-order mark
