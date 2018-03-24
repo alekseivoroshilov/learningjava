@@ -1,18 +1,13 @@
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.Map;
-import java.util.HashMap;
+
 
 class Number {
     private int amount;
-    private int subamount;
     private String dimensionName;
-    private static Map<String, String> mapOfScales = new HashMap<String, String>();
 
-    public static void init() {
-        mapOfScales.put("m", "cm");
-        mapOfScales.put("h", "min");
-    }
+
+
     public String getdimensionName() {
         return dimensionName;
     }
@@ -21,22 +16,21 @@ class Number {
         this.dimensionName = dimensionName;
     }
 
-    private Number() {
+    Number() {
         amount = 0;
-        subamount = 0;
-        dimensionName = "m";
+        dimensionName = "";
     }
 
     Number(int amount, int subamount, String dimensionName) {
         this.amount = amount;
-        this.subamount = subamount;
         this.dimensionName = dimensionName;
     }
 
     private static void recalculate(Number number) {
         double sum = number.amount + (number.subamount / 100.0);
+        number.dimensionName.equals();
         switch (number.dimensionName) {
-            case "m":
+            case MiasurementSystem.:
                 if (sum % 1.0 != 0.0) {
                     number.subamount = (sum % 1.0) * 100.0;
                     number.amount = sum - sum % 1.0;
