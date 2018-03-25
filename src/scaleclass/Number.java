@@ -3,31 +3,34 @@ import java.util.Collections;
 
 
 class Number {
-    private int amount;
+    private Double amount;
     private String dimensionName;
-
-
 
     public String getdimensionName() {
         return dimensionName;
     }
-
+    public Double getAmount(){
+        return amount;
+    }
+    public void setAmount(double amount){
+        this.amount = amount;
+    }
     public void setdimensionName(String dimensionName) {
         this.dimensionName = dimensionName;
     }
 
     Number() {
-        amount = 0;
+        amount = 0.0;
         dimensionName = "";
     }
 
-    Number(int amount, int subamount, String dimensionName) {
+    Number(Double amount, String dimensionName) {
         this.amount = amount;
         this.dimensionName = dimensionName;
     }
 
-    private static void recalculate(Number number) {
-        double sum = number.amount + (number.subamount / 100.0);
+    /*private static void recalculate(Number number) { ///////////////////////IN PROCESS//////////////////////
+        double sum = number.amount + (number / 100.0);
         number.dimensionName.equals();
         switch (number.dimensionName) {
             case MiasurementSystem.:
@@ -44,34 +47,23 @@ class Number {
         }
         if ((number.amount == 0.0) && (Math.abs(number.subamount) > 0.0))
             number.dimensionName = mapOfScales.get(number.dimensionName);
-    }
+    }*/
 
     static Number fromString(String string) {
         ArrayList<String> form = new ArrayList<String>();
         Collections.addAll(form, string.split(" "));
         Number number = new Number();
-            number.amount = Integer.parseInt(form.get(0));
-            //number.subamount = Integer.parseInt(form.get(2)); ///// временная строка
+        number.amount = Double.parseDouble(form.get(0));
         number.dimensionName = form.get(1);
-        if (form.size() == 4) {
+        /*if (form.size() == 4) {
             String subamountdimensionName = form.get(3);
             if (!mapOfScales.containsKey(subamountdimensionName) ||
                     !mapOfScales.get(form.get(1)).equals(subamountdimensionName)) {
                 System.out.println("Wrong number. It is saved as:" + number.amount + " " + number.dimensionName);
                 return number;
             }
-            //number.subamount = Double.parseDouble(form.get(2));
             recalculate(number);
-        }
-        if (mapOfScales.containsValue(number.dimensionName)) {
-            if (number.dimensionName.equals("cm")) {
-                number.dimensionName = "m";
-                number.amount /= 100.0;
-            } else if (number.dimensionName.equals("min")) {
-                number.dimensionName = "h";
-                number.amount /= 60.0;
-            }
-        }
+        }*/
         return number;
     }
 
