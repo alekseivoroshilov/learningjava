@@ -29,26 +29,6 @@ class Number {
         this.dimensionName = dimensionName;
     }
 
-    /*private static void recalculate(Number number) { ///////////////////////IN PROCESS//////////////////////
-        double sum = number.amount + (number / 100.0);
-        number.dimensionName.equals();
-        switch (number.dimensionName) {
-            case MiasurementSystem.:
-                if (sum % 1.0 != 0.0) {
-                    number.subamount = (sum % 1.0) * 100.0;
-                    number.amount = sum - sum % 1.0;
-                }
-            case "h":
-                sum = number.amount + (number.subamount / 60.0);
-                if (sum % 1.0 != 0.0) {
-                    number.subamount = (sum % 1) * 60.0;
-                    number.amount = sum - sum % 1.0;
-                }
-        }
-        if ((number.amount == 0.0) && (Math.abs(number.subamount) > 0.0))
-            number.dimensionName = mapOfScales.get(number.dimensionName);
-    }*/
-
     Number fromString(String string) {
         ArrayList<String> form = new ArrayList<String>();
         Collections.addAll(form, string.split(" "));
@@ -65,13 +45,23 @@ class Number {
     void add(Number number) {
         MeasurementSystem measurement = new MeasurementSystem();
         measurement.init();
+        measurement.transformToAverageDimension(this);
+        measurement.transformToAverageDimension(number);
+        System.out.println(amount + " " + dimensionName + " first");
+        System.out.println(number.amount + " " + number.dimensionName + " second");
+        if(!dimensionName.equals(number.dimensionName)) throw new IllegalArgumentException();
         amount += number.amount;
+        System.out.println(amount);
         measurement.recalculate(this);
     }
 
     void subtraction(Number number) {
         MeasurementSystem measurement = new MeasurementSystem();
         measurement.init();
+        measurement.transformToAverageDimension(this);
+        measurement.transformToAverageDimension(number);
+
+        if(!dimensionName.equals(number.dimensionName)) throw new IllegalArgumentException();
         amount -= number.amount;
         measurement.recalculate(this);
     }
@@ -84,6 +74,12 @@ class Number {
     }
 
     Boolean compareTo(Number otherNumber) {
+        MeasurementSystem measurement = new MeasurementSystem();
+        measurement.init();
+        measurement.recalculate(this);
+        System.out.println(this.amount + " " + this.dimensionName);
+        measurement.recalculate(otherNumber);
+        System.out.println(otherNumber.amount + " " + otherNumber.dimensionName);
         return this.equals(otherNumber);
     }
 
@@ -105,7 +101,7 @@ class Number {
 
         Number otherNumber = (Number) otherObj;
         /*
-        * amount == otherNumber.amount <==== false
+        * amount == otherNumber.amount <==== false   очень странное явление
         * */
         return amount.equals(otherNumber.amount) && dimensionName.equals(otherNumber.getdimensionName());
     }

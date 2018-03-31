@@ -11,10 +11,13 @@ public class NumberTest {
     @org.junit.jupiter.api.Test
     void sum() {
         MeasurementSystem ms = new MeasurementSystem();
-        ms.init();
         Number number = ms.newNumber("6 m");
         number.add(ms.newNumber("0.5 km"));
         assertTrue(number.compareTo(new Number(506.0,"m")));
+        number = ms.newNumber("0.6 cm");
+        number.add(ms.newNumber("0.5 cm"));
+        System.out.println(number.getAmount() + " " + number.getdimensionName() + " result");
+        assertTrue(number.compareTo(new Number(1.1,"cm")));
         /*actual = Number.sum(Number.fromString("2 m"), Number.fromString("15 cm"));
         assertEquals("2.15 m", Number.toString(actual));
         actual = Number.sum(Number.fromString("15 cm"), Number.fromString("15 cm"));
@@ -22,37 +25,35 @@ public class NumberTest {
         actual = Number.sum(Number.fromString("0.0 cm"), Number.fromString("0 m"));
         assertEquals("0.0 cm", Number.toString(actual));*/
     }
-/*    @org.junit.jupiter.api.Test
+    @org.junit.jupiter.api.Test
     void subtraction() {
-        Number actual = Number.subtraction(Number.fromString("2 m"), Number.fromString("4 m"));
-        assertEquals("-2.0 m", Number.toString(actual));
-        actual = Number.subtraction(Number.fromString("2 h"), Number.fromString("1.5 h"));
-        assertEquals("30.0 min", Number.toString(actual));
+        MeasurementSystem ms = new MeasurementSystem();
+        Number number = ms.newNumber("2 m");
+        number.subtraction(ms.newNumber("1 km"));
+        System.out.println(number.getAmount() + " " + number.getdimensionName() + " subtraction");
+        assertTrue(number.compareTo(new Number(-998.0,"m")));
     }
 
     @org.junit.jupiter.api.Test
     void multiplication() {
-        Number actual = Number.fromString("2 m");
-        Number.multiplication(actual, 4);
-        assertEquals("8.0 m", Number.toString(actual));
-        actual = Number.fromString("15 cm");
-        Number.multiplication(actual, 7);
-        assertEquals("1.05 m", Number.toString(actual));
-    }
-
-    @org.junit.jupiter.api.Test
-    void compareTo() {
-        Number expected = Number.fromString("8 m");
-        Number actual = new Number(8.0,0.0, "m");
-        assertTrue(Number.compareTo(expected, actual));
+        MeasurementSystem ms = new MeasurementSystem();
+        Number number = ms.newNumber("2 m");
+        number.multiplication(4000);
+        assertEquals(ms.newNumber("8.0 km"), number);
     }
 
     @org.junit.jupiter.api.Test
     void divisionInto() {
-        Number actual = Number.fromString("8 m");
-        Number.divisionInto(actual, 4);
-        assertEquals("2.0 m", Number.toString(actual));
+        MeasurementSystem ms = new MeasurementSystem();
+        Number number = ms.newNumber("2 m");
+        number.divisionInto(4);
+        assertEquals(ms.newNumber("50 cm"), number);
     }
-*/
 
+    @org.junit.jupiter.api.Test
+    void compareTo() {
+        MeasurementSystem ms = new MeasurementSystem();
+        Number number = ms.newNumber("505 m");
+        assertTrue(number.compareTo(ms.newNumber("0.505 km")));
+    }
 }
