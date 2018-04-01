@@ -1,14 +1,11 @@
-import javafx.util.Pair;
-
 import java.util.ArrayList;
 import java.util.Map;
 import java.util.Iterator;
-import java.math.BigDecimal;
 import java.util.Collections;
 import java.util.LinkedHashMap;
 
 class MeasurementSystem {
-    LinkedHashMap<String, Integer> mapOfMeasurement = new LinkedHashMap<String, Integer>(); //Дерево, потому что важен порядок
+    LinkedHashMap<String, Integer> mapOfMeasurement = new LinkedHashMap<String, Integer>(); //Linked, потому что важен порядок
     ArrayList<MeasurementSystem> measurementList = new ArrayList<>();
 
     public void init() {
@@ -65,7 +62,6 @@ class MeasurementSystem {
                     //проверим, нет ли 0.1 m, которые можно перевести в 10 "cm"
                     // достаю ключ более высокой/низкой величины ("km" выше, чем "m")
                     while (number.getAmount() < 1.0) {
-                        System.out.println(number.getAmount()*10.0 + " sdasd");
                         j++;
                         if (j >= measurement.size()) break;
                         String keyOfLowerDimension = getKeyByIndex(measurement, j);
@@ -90,7 +86,6 @@ class MeasurementSystem {
         Iterator<Map.Entry<String, Integer>> pair = measurement.entrySet().iterator();
         while (0 <= index-- && pair.hasNext()) { //натыкаясь на инкремент/декремент, число меняется
             e = pair.next();
-            System.out.println(e);
         }
 
         return e.getKey(); // спросить

@@ -1,5 +1,3 @@
-import org.junit.jupiter.api.BeforeAll;
-import org.junit.jupiter.api.BeforeEach;
 import static org.junit.jupiter.api.Assertions.*;
 
 public class NumberTest {
@@ -18,12 +16,6 @@ public class NumberTest {
         number.add(ms.newNumber("0.5 cm"));
         System.out.println(number.getAmount() + " " + number.getdimensionName() + " result");
         assertTrue(number.compareTo(new Number(1.1,"cm")));
-        /*actual = Number.sum(Number.fromString("2 m"), Number.fromString("15 cm"));
-        assertEquals("2.15 m", Number.toString(actual));
-        actual = Number.sum(Number.fromString("15 cm"), Number.fromString("15 cm"));
-        assertEquals("30.0 cm", Number.toString(actual));
-        actual = Number.sum(Number.fromString("0.0 cm"), Number.fromString("0 m"));
-        assertEquals("0.0 cm", Number.toString(actual));*/
     }
     @org.junit.jupiter.api.Test
     void subtraction() {
