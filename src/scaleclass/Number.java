@@ -1,7 +1,6 @@
 import java.util.ArrayList;
 import java.util.Collections;
 
-
 class Number {
     private Double amount;
     private String dimensionName;
@@ -43,52 +42,29 @@ class Number {
     }
 
     void add(Number number) {
-        MeasurementSystem measurement = new MeasurementSystem();
-        measurement.init();
-        measurement.transformToAverageDimension(this);
-        measurement.transformToAverageDimension(number);
-        System.out.println(amount + " " + dimensionName + " first");
-        System.out.println(number.amount + " " + number.dimensionName + " second");
         if(!dimensionName.equals(number.dimensionName)) throw new IllegalArgumentException();
         amount += number.amount;
-        System.out.println(amount);
-        measurement.recalculate(this);
     }
 
     void subtraction(Number number) {
-        MeasurementSystem measurement = new MeasurementSystem();
-        measurement.init();
-        measurement.transformToAverageDimension(this);
-        measurement.transformToAverageDimension(number);
-
         if(!dimensionName.equals(number.dimensionName)) throw new IllegalArgumentException();
         amount -= number.amount;
-        measurement.recalculate(this);
     }
 
     void multiplication(double multiplier) {
-        MeasurementSystem measurement = new MeasurementSystem();
-        measurement.init();
         amount *= multiplier;
-        measurement.recalculate(this);
-    }
-
-    Boolean compareTo(Number otherNumber) {
-        MeasurementSystem measurement = new MeasurementSystem();
-        measurement.init();
-        measurement.recalculate(this);
-        System.out.println(this.amount + " " + this.dimensionName);
-        measurement.recalculate(otherNumber);
-        System.out.println(otherNumber.amount + " " + otherNumber.dimensionName);
-        return this.equals(otherNumber);
     }
 
     void divisionInto(double divider) {
-        MeasurementSystem measurement = new MeasurementSystem();
-        measurement.init();
         amount /= divider;
-        measurement.recalculate(this);
     }
+
+    Boolean compareTo(Number otherNumber,MeasurementSystem ms) {
+        ms.recalculate(this);
+        ms.recalculate(otherNumber);
+        return this.equals(otherNumber);
+    }
+
     //если рекомендуют переопределять, то я буду переопределять под свой класс
     @Override
     public boolean equals(Object otherObj) {
