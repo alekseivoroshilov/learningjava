@@ -4,6 +4,7 @@ import java.util.Collections;
 class Number {
     private Double amount;
     private String dimensionName;
+    private MeasurementSystem ms;
 
     public String getdimensionName() {
         return dimensionName;
@@ -23,9 +24,10 @@ class Number {
         dimensionName = "";
     }
 
-    Number(Double amount, String dimensionName) {
+    Number(Double amount, String dimensionName, MeasurementSystem ms) {
         this.amount = amount;
         this.dimensionName = dimensionName;
+        this.ms = ms;
     }
 
     Number fromString(String string) {
@@ -59,10 +61,20 @@ class Number {
         amount /= divider;
     }
 
-    Boolean compareTo(Number otherNumber,MeasurementSystem ms) {
-        ms.recalculate(this);
-        ms.recalculate(otherNumber);
-        return this.equals(otherNumber);
+    Integer compareTo(Number otherNumber) {
+        Number n1 = ms.transformToAverageDimension(this);
+        Number n2 = ms.transformToAverageDimension(otherNumber);
+        if (n1.equals(n2)) {
+            System.out.println("n1 equals n2");
+            return 0;
+        }
+        else if(!n1.dimensionName.equals(n2.dimensionName))
+            throw new IllegalArgumentException();
+        else if(n1.amount > n2.amount) {
+            System.out.println("n1 is bigger than n2");
+            return 1;
+        }
+        else {System.out.println("n1 is less than n2"); return 2;}
     }
 
     //если рекомендуют переопределять, то я буду переопределять под свой класс

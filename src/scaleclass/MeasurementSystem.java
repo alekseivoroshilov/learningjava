@@ -6,22 +6,6 @@ import java.util.LinkedHashMap;
 
 class MeasurementSystem {
     LinkedHashMap<String, Double> mapOfMeasurement = new LinkedHashMap<String, Double>(); //Linked, потому что важен порядок
-    //ArrayList<MeasurementSystem> measurementList = new ArrayList<>();
-
-
-    /*public void init() {
-        MeasurementSystem metric = new MeasurementSystem(); //система мер определённых явлений как отдельный объект
-        MeasurementSystem time = new MeasurementSystem();
-        metric.mapOfMeasurement.put("km", 1000); //вот почему порядок важен, как я говорил выше
-        metric.mapOfMeasurement.put("m", 1000);
-        metric.mapOfMeasurement.put("cm", 100);
-        time.mapOfMeasurement.put("h", 24);
-        time.mapOfMeasurement.put("min", 60);
-        time.mapOfMeasurement.put("sec", 60);
-        measurementList.add(metric);
-        measurementList.add(time);
-    }*/
-
     void addDependence(String dimensionName, double amount) {
         LinkedHashMap<String, Double> pair = new LinkedHashMap<String, Double>();
         pair.put(dimensionName, amount);
@@ -31,32 +15,37 @@ class MeasurementSystem {
     Number newNumber(String string) {
         ArrayList<String> form = new ArrayList<String>();
         Collections.addAll(form, string.split(" "));
-        Number number = new Number();
-        number.setAmount(Double.parseDouble(form.get(0)));
-        number.setdimensionName(form.get(1));
+        double amount = Double.parseDouble(form.get(0));
+        String dimName = form.get(1);
+        Number number = new Number(amount, dimName,this);
         transformToAverageDimension(number);
         return number;
     }
 
-    void recalculate(Number number) {
+    Number recalculate(Number number) {
+        Number recalculatedNumber = new Number(number.getAmount(), number.getdimensionName(), this);
         int j = 0;
         for (Map.Entry e : mapOfMeasurement.entrySet()) {
             if (e.getKey().equals(number.getdimensionName())) break;
             else j++;
         }
         //нас итересует то, если число больше, чем нужно, или наоборот
-        if(number.getAmount() == null) throw new IllegalArgumentException("число null");
-        if (Math.abs(number.getAmount()) >= Math.abs(mapOfMeasurement.get(number.getdimensionName()))) {
+        if(recalculatedNumber.getAmount() == null) throw new IllegalArgumentException("число null");
+        if (Math.abs(recalculatedNumber.getAmount()) >=
+                Math.abs(mapOfMeasurement.get(recalculatedNumber.getdimensionName()))) {
             //проверим, нет ли 101 cm, которые можно перевести в 1.01 "m"
             // достаю ключ более высокой/низкой величины ("km" выше, чем "m")
-            while (number.getAmount() > mapOfMeasurement.get(number.getdimensionName())) {
+            while (recalculatedNumber.getAmount() > mapOfMeasurement.get(recalculatedNumber.getdimensionName())) {
                 if (j <= 0) break;
                 String keyOfHigherDimension = getKeyByIndex(j);
-                number.setAmount(number.getAmount() / mapOfMeasurement.get(keyOfHigherDimension));
-                keyOfHigherDimension = getKeyByIndex(j - 1);
-                number.setdimensionName(keyOfHigherDimension);
+                recalculatedNumber = new
+                        Number(recalculatedNumber.getAmount() / mapOfMeasurement.get(keyOfHigherDimension),
+                        getKeyByIndex(j - 1),this);
                 j--;
-                // если выхожу за пределы значений >km
+                /*как работает с возмлжностью изменения Number:
+                recalculatedNumber.setAmount(recalculatedNumber.getAmount() / mapOfMeasurement.get(keyOfHigherDimension));
+                recalculatedNumber.setdimensionName(keyOfHigherDimension);*/
+
                 // если ключ величны более высокой, то идём влево по списку: ("km", 1.0,<--- "m", 1000.0)
                 // иначе - вправо
             }
@@ -64,18 +53,23 @@ class MeasurementSystem {
         } else if (Math.abs(number.getAmount()) < 1.0) {
             //проверим, нет ли 0.1 m, которые можно перевести в 10 "cm"
             // достаю ключ более высокой/низкой величины ("km" выше, чем "m")
-            while (number.getAmount() < 1.0) {
+            while (recalculatedNumber.getAmount() < 1.0) {
                 j++;
                 if (j >= mapOfMeasurement.size()) break;
                 String keyOfLowerDimension = getKeyByIndex(j);
-                //после того, что ниже, начинаешь верить в магию.
-                number.setAmount((Math.round(number.getAmount() * mapOfMeasurement.get(keyOfLowerDimension) * 1000000.0)) / 1000000.0);
-                number.setdimensionName(keyOfLowerDimension);
-                // если выхожу за пределы значений <cm
+                recalculatedNumber = new
+                        Number((Math.round(number.getAmount() *
+                        mapOfMeasurement.get(keyOfLowerDimension) * 1000000.0)) / 1000000.0,
+                        keyOfLowerDimension,this);
+                /*как работает с возможностью изменения Number:
+                recalculatedNumber.setAmount((Math.round(number.getAmount() *
+                        mapOfMeasurement.get(keyOfLowerDimension) * 1000000.0)) / 1000000.0);
+                recalculatedNumber.setdimensionName(keyOfLowerDimension);*/
+
                 // если ключ величны более высокой, то идём влево по списку: ("km", 1.0,---> "m", 1000.0)
-                // иначе - вправо
             }
         }
+        return recalculatedNumber;
     }
 
     private String getKeyByIndex(int index) {
@@ -91,7 +85,8 @@ class MeasurementSystem {
     }
 
     // этот метод делает то же, что и recalculate, но переводит и cm, и даже km в метры.
-    void transformToAverageDimension(Number number) {
+    Number transformToAverageDimension(Number number) {
+        Number recalculatedNumber = new Number(number.getAmount(), number.getdimensionName(), this);
         if (mapOfMeasurement.containsKey(number.getdimensionName())) { //"13 m" : если в metric есть размерность "m" ...
             int j = 0;
             for (Map.Entry e : mapOfMeasurement.entrySet()) {
@@ -102,19 +97,31 @@ class MeasurementSystem {
             while (j != indexOfAverageDimension) {
                 if (j < indexOfAverageDimension) {
                     j++;
-                    if (j >= mapOfMeasurement.size()) break;
                     String keyOfLowerDimension = getKeyByIndex(j);
-                    number.setAmount((Math.round(number.getAmount() * mapOfMeasurement.get(keyOfLowerDimension) * 100000.0)) / 100000.0);
-                    number.setdimensionName(keyOfLowerDimension);
+                    recalculatedNumber = new
+                            Number((Math.round(number.getAmount() *
+                            mapOfMeasurement.get(keyOfLowerDimension) * 1000000.0)) / 1000000.0,
+                            keyOfLowerDimension,this);
+//                    if (j >= mapOfMeasurement.size()) break;
+//                    String keyOfLowerDimension = getKeyByIndex(j);
+//                    number.setAmount((Math.round(number.getAmount() *
+//                            mapOfMeasurement.get(keyOfLowerDimension) * 100000.0)) / 100000.0);
+//                    number.setdimensionName(keyOfLowerDimension);
                 } else {
                     if (j <= 0) break;
                     String keyOfHigherDimension = getKeyByIndex(j);
-                    number.setAmount(number.getAmount() / mapOfMeasurement.get(keyOfHigherDimension));
-                    keyOfHigherDimension = getKeyByIndex(j - 1);
-                    number.setdimensionName(keyOfHigherDimension);
+                    recalculatedNumber = new
+                            Number(recalculatedNumber.getAmount() / mapOfMeasurement.get(keyOfHigherDimension),
+                            getKeyByIndex(j - 1),this);
                     j--;
+//                    String keyOfHigherDimension = getKeyByIndex(j);
+//                    number.setAmount(number.getAmount() / mapOfMeasurement.get(keyOfHigherDimension));
+//                    keyOfHigherDimension = getKeyByIndex(j - 1);
+//                    number.setdimensionName(keyOfHigherDimension);
+//                    j--;
                 }
             }
         }
+        return recalculatedNumber;
     }
 }
