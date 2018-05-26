@@ -66,8 +66,32 @@ public class NumberTest {
         metric.addDependence("km", 1000.0);
         metric.addDependence("m", 1000.0);
         metric.addDependence("cm", 100.0);
-        number2 = metric.recalculate(number2);
         int result =  number1.compareTo(number2);
+        assertEquals(0, result);
+
+        number1 = metric.newNumber("505 m");
+        number2 = metric.newNumber("505 cm");
+        result =  number1.compareTo(number2);
+        assertEquals(1, result);
+
+        number1 = metric.newNumber("505 m");
+        number2 = metric.newNumber("50505 cm");
+        result =  number1.compareTo(number2);
+        assertEquals(-1, result);
+
+        number1 = metric.newNumber("0.505 km");
+        number2 = metric.newNumber("50500 cm");
+        result =  number1.compareTo(number2);
+        assertEquals(0, result);
+
+        number1 = metric.newNumber("6 m");
+        number2 = metric.newNumber("10 km");
+        result =  number1.compareTo(number2);
+        assertEquals(-1, result);
+
+        number1 = metric.newNumber("0 m");
+        number2 = metric.newNumber("0 cm");
+        result =  number1.compareTo(number2);
         assertEquals(0, result);
     }
 }

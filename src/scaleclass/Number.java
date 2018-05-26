@@ -1,7 +1,7 @@
 import java.util.ArrayList;
 import java.util.Collections;
 
-class Number {
+class Number implements Comparable<Number>{
     private Double amount;
     private String dimensionName;
     private MeasurementSystem ms;
@@ -61,20 +61,23 @@ class Number {
         amount /= divider;
     }
 
-    Integer compareTo(Number otherNumber) {
+    @Override
+    public int compareTo(Number otherNumber){
         Number n1 = ms.transformToAverageDimension(this);
         Number n2 = ms.transformToAverageDimension(otherNumber);
-        if (n1.equals(n2)) {
-            System.out.println("n1 equals n2");
-            return 0;
+
+        int result = n1.dimensionName.compareTo(n2.dimensionName);
+        if (result != 0) {
+            return result;
         }
-        else if(!n1.dimensionName.equals(n2.dimensionName))
-            throw new IllegalArgumentException();
-        else if(n1.amount > n2.amount) {
-            System.out.println("n1 is bigger than n2");
-            return 1;
+
+        result = (int) Math.floor(n1.amount - n2.amount);
+        System.out.println(n1.amount + " " + n2.amount);
+        if (result != 0) {
+            return result / Math.abs(result);
         }
-        else {System.out.println("n1 is less than n2"); return 2;}
+
+        return 0;
     }
 
     //если рекомендуют переопределять, то я буду переопределять под свой класс
@@ -103,3 +106,6 @@ class Number {
         return result;
     }А как лучше сравнивать в этом случае? Оставлю этот вопрос на встречу с вами.*/
 }
+//public interface Comparable {
+
+//}
