@@ -42,10 +42,6 @@ class MeasurementSystem {
                         Number(recalculatedNumber.getAmount() / mapOfMeasurement.get(keyOfHigherDimension),
                         getKeyByIndex(j - 1),this);
                 j--;
-                /*как работает с возмлжностью изменения Number:
-                recalculatedNumber.setAmount(recalculatedNumber.getAmount() / mapOfMeasurement.get(keyOfHigherDimension));
-                recalculatedNumber.setdimensionName(keyOfHigherDimension);*/
-
                 // если ключ величны более высокой, то идём влево по списку: ("km", 1.0,<--- "m", 1000.0)
                 // иначе - вправо
             }
@@ -61,10 +57,6 @@ class MeasurementSystem {
                         Number((Math.round(number.getAmount() *
                         mapOfMeasurement.get(keyOfLowerDimension) * 1000000.0)) / 1000000.0,
                         keyOfLowerDimension,this);
-                /*как работает с возможностью изменения Number:
-                recalculatedNumber.setAmount((Math.round(number.getAmount() *
-                        mapOfMeasurement.get(keyOfLowerDimension) * 1000000.0)) / 1000000.0);
-                recalculatedNumber.setdimensionName(keyOfLowerDimension);*/
 
                 // если ключ величны более высокой, то идём влево по списку: ("km", 1.0,---> "m", 1000.0)
             }
@@ -102,11 +94,7 @@ class MeasurementSystem {
                             Number((Math.round(number.getAmount() *
                             mapOfMeasurement.get(keyOfLowerDimension) * 1000000.0)) / 1000000.0,
                             keyOfLowerDimension,this);
-//                    if (j >= mapOfMeasurement.size()) break;
-//                    String keyOfLowerDimension = getKeyByIndex(j);
-//                    number.setAmount((Math.round(number.getAmount() *
-//                            mapOfMeasurement.get(keyOfLowerDimension) * 100000.0)) / 100000.0);
-//                    number.setdimensionName(keyOfLowerDimension);
+
                 } else {
                     if (j <= 0) break;
                     String keyOfHigherDimension = getKeyByIndex(j);
@@ -114,11 +102,7 @@ class MeasurementSystem {
                             Number(recalculatedNumber.getAmount() / mapOfMeasurement.get(keyOfHigherDimension),
                             getKeyByIndex(j - 1),this);
                     j--;
-//                    String keyOfHigherDimension = getKeyByIndex(j);
-//                    number.setAmount(number.getAmount() / mapOfMeasurement.get(keyOfHigherDimension));
-//                    keyOfHigherDimension = getKeyByIndex(j - 1);
-//                    number.setdimensionName(keyOfHigherDimension);
-//                    j--;
+
                 }
             }
         }

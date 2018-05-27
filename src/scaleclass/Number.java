@@ -62,8 +62,8 @@ class Number implements Comparable<Number>{
     }
 
     @Override
-    public int compareTo(Number otherNumber){
-        Number n1 = ms.transformToAverageDimension(this);
+    public int compareTo(Number otherNumber){ // теперь можно пользоваться sort()
+        Number n1 = ms.transformToAverageDimension(this); //возвращает число, не изменяя его
         Number n2 = ms.transformToAverageDimension(otherNumber);
 
         int result = n1.dimensionName.compareTo(n2.dimensionName);
@@ -72,7 +72,6 @@ class Number implements Comparable<Number>{
         }
 
         result = (int) Math.floor(n1.amount - n2.amount);
-        System.out.println(n1.amount + " " + n2.amount);
         if (result != 0) {
             return result / Math.abs(result);
         }
@@ -106,6 +105,3 @@ class Number implements Comparable<Number>{
         return result;
     }А как лучше сравнивать в этом случае? Оставлю этот вопрос на встречу с вами.*/
 }
-//public interface Comparable {
-
-//}
